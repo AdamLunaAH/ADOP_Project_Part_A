@@ -7,8 +7,12 @@ class Program
 {
     static async Task Main(string[] args)
     {
-        double latitude = 59.5086798659495;
-        double longitude = 18.2654625932976;
+        //double latitude = 59.5086798659495;
+        double latitude = 60.674722;
+
+        //double longitude = 18.2654625932976;
+        double longitude = 17.144444;
+
 
         Forecast forecast = await new OpenWeatherService().GetForecastAsync(latitude, longitude);
 

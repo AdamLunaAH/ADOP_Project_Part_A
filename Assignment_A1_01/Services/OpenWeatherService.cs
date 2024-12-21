@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using Assignment_A1_01.Models;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Assignment_A1_01.Services;
 
@@ -31,6 +32,10 @@ public class OpenWeatherService
         //      WindSpeed: wind.speed
         //      Description:  first item in weather[].description
         //      Icon:  $"http://openweathermap.org/img/w/{wdle.weather.First().icon}.png"   //NOTE: Not necessary, only if you like to use an icon
+
+        Console.WriteLine($"{wd.city.name}{wd.list[0].main.temp}");
+        //Console.WriteLine(wd.);
+
 
         var forecast = new Forecast(); //dummy to compile, replaced by your own code
         return forecast;
