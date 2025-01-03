@@ -11,6 +11,8 @@ public class OpenWeatherService
 
     public async Task<Forecast> GetForecastAsync(double latitude, double longitude)
     {
+
+        
         //https://openweathermap.org/current
         var language = System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
         var uri = $"https://api.openweathermap.org/data/2.5/forecast?lat={latitude}&lon={longitude}&units=metric&lang={language}&appid={_apiKey}";
@@ -22,6 +24,7 @@ public class OpenWeatherService
         string content = await response.Content.ReadAsStringAsync();
         WeatherApiData wd = JsonConvert.DeserializeObject<WeatherApiData>(content);
 
+        #region Notes
         //Convert WeatherApiData to Forecast using Linq.
         //Your code
         //Hint: you will find 
@@ -32,13 +35,70 @@ public class OpenWeatherService
         //      WindSpeed: wind.speed
         //      Description:  first item in weather[].description
         //      Icon:  $"http://openweathermap.org/img/w/{wdle.weather.First().icon}.png"   //NOTE: Not necessary, only if you like to use an icon
+        #endregion
+        //int i = 0;
+        //Console.WriteLine($"{wd.city.name}{wd.list[0].main.temp}\n");
 
-        Console.WriteLine($"{wd.city.name}{wd.list[0].main.temp}");
+        // Date from dt_txt in String (DateTime) format converted to DateTime
+        //var weatherDate = wd.list.Select(weatherData => new { weatherData, parsedDate = DateTime.Parse(weatherData.dt_txt) });
+
+        //// Date from dt in UnixTimeStamp format converted to DateTime
+        //var weatherDate = wd.list.Select(weatherData => new { weatherData, parsedDate = UnixTimeStampToDateTime(weatherData.dt) });
+
+
+        ////foreach (var date in weatherDate)
+        ////{
+        ////    Console.WriteLine($"{date.parsedDate} { date.weatherData.main.temp}");
+        ////}
+
+        //var groupByDate = weatherDate.GroupBy(x => x.parsedDate.Date);
+
+        //foreach (var date in groupByDate)
+        //{
+        //    Console.WriteLine(date.Key.ToShortDateString());
+        //    foreach (var item in date)
+        //    {
+        //        Console.WriteLine($"{item.parsedDate.ToLocalTime().ToShortTimeString()} - Temp: {item.weatherData.main.temp}, Condition: {item.weatherData.weather[0].description}, Wind: {item.weatherData.wind.speed}");
+        //    }
+        //}
+
+        
+
+        //foreach (var date in wd.list)
+        //{
+        //    Console.WriteLine(wd.list[i].dt_txt);
+        //    foreach (var item in wd.list)
+        //    {
+        //        Console.WriteLine($"Temp: {wd.list[i].main.temp}, Condition: {wd.list[i].weather[0].description}, Wind: {wd.list[i].wind.speed}, time: {wd.list[i].dt_txt}");
+        //    }
+
+        //    i++;
+        //}
+
+
         //Console.WriteLine(wd.);
 
 
-        var forecast = new Forecast(); //dummy to compile, replaced by your own code
+        //var forecast = new Forecast();//dummy to compile, replaced by your own code
+
+        var forecast = new Forecast
+        {
+            City = wd.city.name,
+            Items = wd.list.Select(item => new ForecastItem
+            {
+                DateTime = UnixTimeStampToDateTime(item.dt),
+                Temperature = item.main.temp,
+                WindSpeed = item.wind.speed,
+                Description = item.weather.FirstOrDefault().description,
+                Icon = $"http://openweathermap.org/img/w/{item.weather.First().icon}.png"
+            }).ToList()
+        };
+
+
+
         return forecast;
+
+        
     }
     private DateTime UnixTimeStampToDateTime(double unixTimeStamp) => DateTime.UnixEpoch.AddSeconds(unixTimeStamp).ToLocalTime();
 }

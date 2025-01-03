@@ -5,7 +5,7 @@ namespace Assignment_A1_02.Services;
 public class OpenWeatherService
 {
     readonly HttpClient _httpClient = new HttpClient();
-    readonly string _apiKey = "";
+    readonly string _apiKey = "d11de2c96e160e2d3350ad3db04c75bc";
 
     //Event declaration
     public event EventHandler<string> WeatherForecastAvailable;
@@ -19,10 +19,20 @@ public class OpenWeatherService
         var language = System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
         var uri = $"https://api.openweathermap.org/data/2.5/forecast?q={City}&units=metric&lang={language}&appid={_apiKey}";
 
+
         Forecast forecast = await ReadWebApiAsync(uri);
-        
+
+        //Console.WriteLine($"Weather forecast for {forecast.City}");
+
+        //Console.WriteLine($"{forecast.City}{wd.list[0].main.temp}\n");
+
         //Event code here to fire the event
         //Your code
+
+        Console.WriteLine($"Weather forecast for {forecast.City}");
+        
+
+
         return forecast;
     }
     public async Task<Forecast> GetForecastAsync(double latitude, double longitude)
@@ -35,6 +45,11 @@ public class OpenWeatherService
 
         //Event code here to fire the event
         //Your code
+
+        //Console.WriteLine($"Weather forecast for {forecast.City}");
+        //Console.WriteLine($"{wd.city.name}{wd.list[0].main.temp}\n");
+        
+
         return forecast;
     }
     private async Task<Forecast> ReadWebApiAsync(string uri)
@@ -49,6 +64,9 @@ public class OpenWeatherService
         //Convert WeatherApiData to Forecast using Linq.
         //Your code
         var forecast = new Forecast(); //dummy to compile, replaced by your own code
+
+        //Console.WriteLine($"{wd.city.name}{wd.list[0].main.temp}\n");
+
         return forecast;
     }
 

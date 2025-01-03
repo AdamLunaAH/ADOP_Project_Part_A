@@ -18,6 +18,36 @@ class Program
 
         //Your Code to present each forecast item in a grouped list
         Console.WriteLine($"Weather forecast for {forecast.City}");
+        //Console.WriteLine($""
+
+
+
+
+            // Date from dt in UnixTimeStamp format converted to DateTime
+        //var weatherDate = wd.list.Select(weatherData => new { weatherData, parsedDate = UnixTimeStampToDateTime(weatherData.dt) });
+
+
+        //foreach (var date in weatherDate)
+        //{
+        //    Console.WriteLine($"{date.parsedDate} { date.weatherData.main.temp}");
+        //}
+
+        var groupByDate = forecast.Items.GroupBy(x => x.DateTime.Date);
+
+        foreach (var date in groupByDate)
+        {
+            Console.WriteLine($"Date: {date.Key.ToShortDateString()}");
+            foreach (var hour in date)
+            {
+                Console.WriteLine($"Time: {hour.DateTime.ToLocalTime().ToShortTimeString()}\n" +
+                    $"  Temp: {hour.Temperature}\n" +
+                    $"  Wind speed: {hour.WindSpeed}\n" +
+                    $"  Condition: {hour.Description}\n" +
+                    $"  Icon: {hour.Icon}");
+
+            }
+            Console.WriteLine();
+        }
     }
 }
 
