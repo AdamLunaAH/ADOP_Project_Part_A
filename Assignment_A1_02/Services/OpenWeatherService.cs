@@ -22,10 +22,7 @@ public class OpenWeatherService
 
         Forecast forecast = await ReadWebApiAsync(uri);
 
-        //Console.WriteLine($"Weather forecast for {forecast.City}");
-
-        //Console.WriteLine($"{forecast.City}{wd.list[0].main.temp}\n");
-
+        
         //Event code here to fire the event
         //Your code
 
@@ -46,8 +43,6 @@ public class OpenWeatherService
         //Event code here to fire the event
         //Your code
 
-        //Console.WriteLine($"Weather forecast for {forecast.City}");
-        //Console.WriteLine($"{wd.city.name}{wd.list[0].main.temp}\n");
         
 
         return forecast;
@@ -63,9 +58,20 @@ public class OpenWeatherService
 
         //Convert WeatherApiData to Forecast using Linq.
         //Your code
-        var forecast = new Forecast(); //dummy to compile, replaced by your own code
+        //var forecast = new Forecast(); //dummy to compile, replaced by your own code
 
-        //Console.WriteLine($"{wd.city.name}{wd.list[0].main.temp}\n");
+        var forecast = new Forecast
+        {
+            City = wd.city.name,
+            Items = wd.list.Select(item => new ForecastItem
+            {
+                DateTime = UnixTimeStampToDateTime(item.dt),
+                Temperature = item.main.temp,
+                WindSpeed = item.wind.speed,
+                Description = item.weather.FirstOrDefault().description,
+                Icon = $"http://openweathermap.org/img/w/{item.weather.First().icon}.png"
+            }).ToList()
+        };
 
         return forecast;
     }

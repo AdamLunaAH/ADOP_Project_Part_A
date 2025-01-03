@@ -23,15 +23,7 @@ class Program
 
 
 
-            // Date from dt in UnixTimeStamp format converted to DateTime
-        //var weatherDate = wd.list.Select(weatherData => new { weatherData, parsedDate = UnixTimeStampToDateTime(weatherData.dt) });
-
-
-        //foreach (var date in weatherDate)
-        //{
-        //    Console.WriteLine($"{date.parsedDate} { date.weatherData.main.temp}");
-        //}
-
+        // Date from dt in UnixTimeStamp format converted to DateTime
         var groupByDate = forecast.Items.GroupBy(x => x.DateTime.Date);
 
         foreach (var date in groupByDate)

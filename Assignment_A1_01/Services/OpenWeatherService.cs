@@ -36,50 +36,6 @@ public class OpenWeatherService
         //      Description:  first item in weather[].description
         //      Icon:  $"http://openweathermap.org/img/w/{wdle.weather.First().icon}.png"   //NOTE: Not necessary, only if you like to use an icon
         #endregion
-        //int i = 0;
-        //Console.WriteLine($"{wd.city.name}{wd.list[0].main.temp}\n");
-
-        // Date from dt_txt in String (DateTime) format converted to DateTime
-        //var weatherDate = wd.list.Select(weatherData => new { weatherData, parsedDate = DateTime.Parse(weatherData.dt_txt) });
-
-        //// Date from dt in UnixTimeStamp format converted to DateTime
-        //var weatherDate = wd.list.Select(weatherData => new { weatherData, parsedDate = UnixTimeStampToDateTime(weatherData.dt) });
-
-
-        ////foreach (var date in weatherDate)
-        ////{
-        ////    Console.WriteLine($"{date.parsedDate} { date.weatherData.main.temp}");
-        ////}
-
-        //var groupByDate = weatherDate.GroupBy(x => x.parsedDate.Date);
-
-        //foreach (var date in groupByDate)
-        //{
-        //    Console.WriteLine(date.Key.ToShortDateString());
-        //    foreach (var item in date)
-        //    {
-        //        Console.WriteLine($"{item.parsedDate.ToLocalTime().ToShortTimeString()} - Temp: {item.weatherData.main.temp}, Condition: {item.weatherData.weather[0].description}, Wind: {item.weatherData.wind.speed}");
-        //    }
-        //}
-
-        
-
-        //foreach (var date in wd.list)
-        //{
-        //    Console.WriteLine(wd.list[i].dt_txt);
-        //    foreach (var item in wd.list)
-        //    {
-        //        Console.WriteLine($"Temp: {wd.list[i].main.temp}, Condition: {wd.list[i].weather[0].description}, Wind: {wd.list[i].wind.speed}, time: {wd.list[i].dt_txt}");
-        //    }
-
-        //    i++;
-        //}
-
-
-        //Console.WriteLine(wd.);
-
-
-        //var forecast = new Forecast();//dummy to compile, replaced by your own code
 
         var forecast = new Forecast
         {
@@ -93,8 +49,6 @@ public class OpenWeatherService
                 Icon = $"http://openweathermap.org/img/w/{item.weather.First().icon}.png"
             }).ToList()
         };
-
-
 
         return forecast;
 
