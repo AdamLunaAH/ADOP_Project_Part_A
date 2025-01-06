@@ -27,59 +27,6 @@ public class OpenWeatherService
         //Your code
         OnWeatherForecastAvailable($"Weather forecast for {City} is available.");
 
-        //Console.WriteLine($"Location: {forecast.City}");
-        //Console.WriteLine("GetForecastAsync: City");
-        // Date from dt in UnixTimeStamp format converted to DateTime
-        //var groupByDate = forecast.Items.GroupBy(x => x.DateTime.Date);
-
-        //foreach (var date in groupByDate)
-        //{
-        //    Console.WriteLine($"Date: {date.Key.ToShortDateString()}");
-        //    foreach (var hour in date)
-        //    {
-        //        Console.WriteLine($"Time: {hour.DateTime.ToLocalTime().ToShortTimeString()}" +
-        //            $"  Temp: {hour.Temperature}\n" +
-        //            $"  Wind speed: {hour.WindSpeed}\n" +
-        //            $"  Condition: {hour.Description}\n" +
-        //            $"  Icon: {hour.Icon}\n");
-        //        Console.WriteLine(forecast.City);
-
-        //    }
-        //    Console.WriteLine();
-        //}
-
-
-        //foreach (var item in forecast.Items)
-        //{
-        //    Console.WriteLine($"Date: {item.DateTime.ToShortDateString()}");
-        //    foreach (var hour in forecast.Items)
-        //    {
-        //        Console.WriteLine($"Time: {hour.DateTime.ToLocalTime().ToShortTimeString()}\n" +
-        //            $"  Temp: {hour.Temperature}\n" +
-        //            $"  Wind speed: {hour.WindSpeed}\n" +
-        //            $"  Condition: {hour.Description}\n" +
-        //            $"  Icon: {hour.Icon}");
-        //        Console.WriteLine(forecast.City);
-        //    }
-        //}
-
-        //foreach (var item in forecast.Items.GroupBy(x => x.DateTime.Date))
-        //{
-        //    Console.WriteLine($"***********************\n" +
-        //        $"Date: {item.Key.ToShortDateString()}");
-
-        //    foreach (var hour in item)
-        //    {
-        //        Console.WriteLine($"    Time: {hour.DateTime.ToLocalTime().ToShortTimeString()}\n" +
-        //            $"      Temp: {hour.Temperature}\n" +
-        //            $"      Wind speed: {hour.WindSpeed}\n" +
-        //            $"      Condition: {hour.Description}\n" +
-        //            $"      Icon: {hour.Icon}");
-        //        Console.WriteLine(forecast.City);
-        //    }
-        //    Console.WriteLine("***********************\n\n");
-        //}
-
         return forecast;
     }
     public async Task<Forecast> GetForecastAsync(double latitude, double longitude)
@@ -93,47 +40,6 @@ public class OpenWeatherService
         //Event code here to fire the event
         //Your code
         OnWeatherForecastAvailable($"Weather forecast for coordinates ({latitude}, {longitude}) is available.");
-
-        //Console.WriteLine("GetForecastAsync: Coordinates");
-
-
-        //Console.WriteLine($"Location: {forecast.City}");
-        // Date from dt in UnixTimeStamp format converted to DateTime
-        //var groupByDate = forecast.Items.GroupBy(x => x.DateTime.Date);
-
-        //foreach (var date in groupByDate)
-        //{
-        //    Console.WriteLine($"Date: {date.Key.ToShortDateString()}");
-        //    foreach (var hour in date)
-        //    {
-        //        Console.WriteLine($"Time: {hour.DateTime.ToLocalTime().ToShortTimeString()}\n" +
-        //            $"  Temp: {hour.Temperature}\n" +
-        //            $"  Wind speed: {hour.WindSpeed}\n" +
-        //            $"  Condition: {hour.Description}\n" +
-        //            $"  Icon: {hour.Icon}");
-        //        Console.WriteLine(forecast.City);
-
-        //    }
-        //    Console.WriteLine();
-        //}
-
-        //foreach (var item in forecast.Items.GroupBy(x => x.DateTime.Date))
-        //{
-        //    Console.WriteLine($"***********************\n" +
-        //        $"Date: {item.Key.ToShortDateString()}");
-
-        //    foreach (var hour in item)
-        //    {
-        //        Console.WriteLine($"    Time: {hour.DateTime.ToLocalTime().ToShortTimeString()}\n" +
-        //            $"      Temp: {hour.Temperature}\n" +
-        //            $"      Wind speed: {hour.WindSpeed}\n" +
-        //            $"      Condition: {hour.Description}\n" +
-        //            $"      Icon: {hour.Icon}");
-        //        Console.WriteLine(forecast.City);
-        //    }
-        //    Console.WriteLine("***********************\n\n");
-        //}
-
 
         return forecast;
     }

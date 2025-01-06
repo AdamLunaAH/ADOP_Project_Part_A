@@ -28,7 +28,6 @@ class Program
             tasks[1] = service.GetForecastAsync("Falun");
 
             await Task.WhenAll(tasks);
-            //Task.WaitAll(tasks[0], tasks[1]);
         }
 
         catch (Exception ex)
