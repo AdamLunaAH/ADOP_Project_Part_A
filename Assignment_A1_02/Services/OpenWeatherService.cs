@@ -22,14 +22,32 @@ public class OpenWeatherService
 
         Forecast forecast = await ReadWebApiAsync(uri);
 
-        
+
         //Event code here to fire the event
         //Your code
 
-        Console.WriteLine($"Weather forecast for {forecast.City}");
-        
+        Console.WriteLine($"Location: {forecast.City}");
 
+        // Date from dt in UnixTimeStamp format converted to DateTime
+        /*var groupByDate = */
+        forecast.Items.GroupBy(x => x.DateTime.Date);
 
+        //foreach (var date in groupByDate)
+        //{
+        //    Console.WriteLine($"Date: {date.Key.ToShortDateString()}");
+        //    foreach (var hour in date)
+        //    {
+        //        Console.WriteLine($"Time: {hour.DateTime.ToLocalTime().ToShortTimeString()}\n" +
+        //            $"  Temp: {hour.Temperature}\n" +
+        //            $"  Wind speed: {hour.WindSpeed}\n" +
+        //            $"  Condition: {hour.Description}\n" +
+        //            $"  Icon: {hour.Icon}");
+
+        //    }
+        //    Console.WriteLine();
+        //}
+
+        //Console.WriteLine("GetForecastAsync: City");
         return forecast;
     }
     public async Task<Forecast> GetForecastAsync(double latitude, double longitude)
@@ -42,8 +60,29 @@ public class OpenWeatherService
 
         //Event code here to fire the event
         //Your code
-
         
+        Console.WriteLine($"Location: {forecast.City}");
+        // Date from dt in UnixTimeStamp format converted to DateTime
+        /*var groupByDate = */
+        
+        forecast.Items.GroupBy(x => x.DateTime.Date);
+
+        //foreach (var date in groupByDate)
+        //{
+        //    Console.WriteLine($"Date: {date.Key.ToShortDateString()}");
+        //    foreach (var hour in date)
+        //    {
+        //        Console.WriteLine($"Time: {hour.DateTime.ToLocalTime().ToShortTimeString()}\n" +
+        //            $"  Temp: {hour.Temperature}\n" +
+        //            $"  Wind speed: {hour.WindSpeed}\n" +
+        //            $"  Condition: {hour.Description}\n" +
+        //            $"  Icon: {hour.Icon}");
+
+        //    }
+        //    Console.WriteLine();
+        //}
+
+        //Console.WriteLine("GetForecastAsync: Coor");
 
         return forecast;
     }
@@ -72,6 +111,10 @@ public class OpenWeatherService
                 Icon = $"http://openweathermap.org/img/w/{item.weather.First().icon}.png"
             }).ToList()
         };
+
+        ;
+        //Console.WriteLine("ReadWebApiAsync");
+        
 
         return forecast;
     }
