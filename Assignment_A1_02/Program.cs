@@ -27,9 +27,10 @@ class Program
             tasks[0] = service.GetForecastAsync(latitude, longitude);
             tasks[1] = service.GetForecastAsync("Falun");
 
-            Task.WaitAll(tasks[0], tasks[1]);
-            //Console.WriteLine("Tasks completed");
+            await Task.WhenAll(tasks);
+            //Task.WaitAll(tasks[0], tasks[1]);
         }
+
         catch (Exception ex)
         {
             exception = ex;
@@ -41,19 +42,6 @@ class Program
             {
                 Console.WriteLine($"Inner Exception: {ex.InnerException.Message}");
             }
-
-            //if (tasks[0] == null)
-            //{
-            //    Console.WriteLine($"Coordinates not found: {ex.Message}");
-            //}
-            //else if (tasks[1] == null)
-            //{
-            //    Console.WriteLine($"Location not found: {ex.Message}");
-            //}
-            //else
-            //{
-            //    Console.WriteLine($"An error occurred: {ex.Message}");
-            //}
         }
 
         foreach (var task in tasks)
@@ -81,7 +69,6 @@ class Program
                         Console.WriteLine($" - {innerEx.Message}");
                     }
                     break;
-
                 case TaskStatus.Canceled:
                     Console.WriteLine("Task was canceled.");
                     break;
@@ -89,74 +76,6 @@ class Program
                     Console.WriteLine($"Task is in an unexpected state: {task.Status}");
                     break;
             }
-
-
-            //if (task.Status == TaskStatus.RanToCompletion)
-            //{
-            //    // The task completed successfully
-            //    Forecast forecast = task.Result; // Access the result of the task
-            //    Console.WriteLine($"Task successfully completed");
-            //    //Console.WriteLine($"Forecast retrieved: {forecast.Summary}");
-            //}
-            //else if (task.Status == TaskStatus.Faulted)
-            //{
-            //    // The task encountered an exception
-            //    Console.WriteLine($"Task faulted with exception: {task.Exception?.GetBaseException().Message}");
-            //}
-            //else if (task.Status == TaskStatus.Canceled)
-            //{
-            //    // The task was canceled
-            //    Console.WriteLine("Task was canceled.");
-            //}
-            //else
-            //{
-            //    // Message for unexpected task errors
-            //    Console.WriteLine($"Task is in an unexpected state: {task.Status}");
-            //}
-
-
-
-
-
-
-
-
-            ////Console.WriteLine($"\nLocation: {task.Result.City}");
-
-            ////foreach (var date in task)
-            ////{
-            ////    //Console.WriteLine($"Date: {task.Result.Items[0].DateTime.ToShortDateString()}");
-
-            ////    Console.WriteLine($"Date: {date.Key.ToShortDateString()}");
-
-            ////    foreach (var hour in hour)
-            ////    {
-            ////        Console.WriteLine($"Time: {hour.DateTime.ToLocalTime().ToShortTimeString()}\n" +
-            ////        $"  Temp: {hour.Temperature}\n" +
-            ////        $"  Wind speed: {hour.WindSpeed}\n" +
-            ////        $"  Condition: {hour.Description}\n" +
-            ////        $"  Icon: {hour.Icon}");
-            ////    }
-            ////}
-            ////Console.WriteLine();
-
-
-            //////if (task != null)
-            //////{
-            //////    Console.WriteLine($"\nTask result: {exception.Message}");
-            //////}
-
-            //////Console.WriteLine($"Date: {task.Result.Items[0].DateTime.ToShortDateString()}");
-            //////foreach (var hour in task)
-            //////{
-            //////    Console.WriteLine($"Time: {hour.DateTime.ToLocalTime().ToShortTimeString()}\n" +
-            //////        $"  Temp: {hour.Temperature}\n" +
-            //////        $"  Wind speed: {hour.WindSpeed}\n" +
-            //////        $"  Condition: {hour.Description}\n" +
-            //////        $"  Icon: {hour.Icon}");
-
-            //////}
-            ////Console.WriteLine();
 
         }
     }
