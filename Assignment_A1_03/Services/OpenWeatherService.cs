@@ -12,7 +12,9 @@ public class OpenWeatherService
     readonly ConcurrentDictionary<(string, string), Forecast> _cachedCityForecasts = new ConcurrentDictionary<(string, string), Forecast>();
 
     // Your API Key
-    readonly string apiKey = "";
+    readonly string apiKey = "d11de2c96e160e2d3350ad3db04c75bc";
+    //readonly string apiKey = "";
+
 
     //Event declaration
     public event EventHandler<string> WeatherForecastAvailable;
@@ -25,7 +27,15 @@ public class OpenWeatherService
         //part of cache code here to check if forecast in Cache
         //generate an event that shows forecast was from cache
         //Your code
-        
+
+        // Check if the forecast for the city is in the cache
+        if (_cachedCityForecasts.TryGetValue((City, System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName), out var cachedForecast))
+        {
+            // Trigger event indicating data is from cache
+            OnWeatherForecastAvailable($"Weather forecast for {City} is available from cache.");
+            return cachedForecast;
+        }
+
         //https://openweathermap.org/current
         var language = System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
         var uri = $"https://api.openweathermap.org/data/2.5/forecast?q={City}&units=metric&lang={language}&appid={apiKey}";
@@ -36,6 +46,11 @@ public class OpenWeatherService
         //generate an event with different message if cached data
         //Your code
 
+        // Cache the result
+        _cachedCityForecasts[(City, language)] = forecast;
+
+        OnWeatherForecastAvailable($"Weather forecast for {City} is available.");
+
         return forecast;
 
     }
@@ -44,6 +59,15 @@ public class OpenWeatherService
         //part of cache code here to check if forecast in Cache
         //generate an event that shows forecast was from cache
         //Your code
+
+        // Check if the forecast for the coordinates is in the cache
+        if (_cachedGeoForecasts.TryGetValue((latitude, longitude, System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName), out var cachedForecast))
+        {
+            // Trigger event indicating data is from cache
+            OnWeatherForecastAvailable($"Weather forecast for coordinates ({latitude}, {longitude}) is available from cache.");
+            return cachedForecast;
+        }
+
 
         //https://openweathermap.org/current
         var language = System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
@@ -54,6 +78,11 @@ public class OpenWeatherService
         //part of event and cache code here
         //generate an event with different message if cached data
         //Your code
+
+        // Cache the result
+        _cachedGeoForecasts[(latitude, longitude, language)] = forecast;
+
+        OnWeatherForecastAvailable($"Weather forecast for coordinates ({latitude}, {longitude}) is available.");
 
         return forecast;
     }
@@ -68,7 +97,18 @@ public class OpenWeatherService
 
         //Convert WeatherApiData to Forecast using Linq.
         //Your code
-        var forecast = new Forecast(); //dummy to compile, replaced by your own code
+        var forecast = new Forecast
+        {
+            City = wd.city.name,
+            Items = wd.list.Select(item => new ForecastItem
+            {
+                DateTime = UnixTimeStampToDateTime(item.dt),
+                Temperature = item.main.temp,
+                WindSpeed = item.wind.speed,
+                Description = item.weather.FirstOrDefault().description,
+                Icon = $"http://openweathermap.org/img/w/{item.weather.First().icon}.png"
+            }).ToList()
+        };
         return forecast;
     }
 

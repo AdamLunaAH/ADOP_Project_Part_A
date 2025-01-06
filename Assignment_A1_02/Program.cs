@@ -102,7 +102,6 @@ class Program
                     $"      Wind speed: {hour.WindSpeed}\n" +
                     $"      Condition: {hour.Description}\n" +
                     $"      Icon: {hour.Icon}");
-                Console.WriteLine(forecast.City);
             }
             Console.WriteLine("***********************\n\n");
         }
