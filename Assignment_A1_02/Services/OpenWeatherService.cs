@@ -25,29 +25,30 @@ public class OpenWeatherService
 
         //Event code here to fire the event
         //Your code
+        OnWeatherForecastAvailable($"Weather forecast for {City} is available.");
 
-        Console.WriteLine($"Location: {forecast.City}");
+        //Console.WriteLine($"Location: {forecast.City}");
 
         // Date from dt in UnixTimeStamp format converted to DateTime
-        /*var groupByDate = */
-        forecast.Items.GroupBy(x => x.DateTime.Date);
+        var groupByDate = forecast.Items.GroupBy(x => x.DateTime.Date);
 
-        //foreach (var date in groupByDate)
-        //{
-        //    Console.WriteLine($"Date: {date.Key.ToShortDateString()}");
-        //    foreach (var hour in date)
-        //    {
-        //        Console.WriteLine($"Time: {hour.DateTime.ToLocalTime().ToShortTimeString()}\n" +
-        //            $"  Temp: {hour.Temperature}\n" +
-        //            $"  Wind speed: {hour.WindSpeed}\n" +
-        //            $"  Condition: {hour.Description}\n" +
-        //            $"  Icon: {hour.Icon}");
+        foreach (var date in groupByDate)
+        {
+            Console.WriteLine($"Date: {date.Key.ToShortDateString()}");
+            foreach (var hour in date)
+            {
+                Console.WriteLine($"Time: {hour.DateTime.ToLocalTime().ToShortTimeString()}" +
+                    $"  Temp: {hour.Temperature}\n" +
+                    $"  Wind speed: {hour.WindSpeed}\n" +
+                    $"  Condition: {hour.Description}\n" +
+                    $"  Icon: {hour.Icon}\n");
+                //Console.WriteLine(forecast.City);
 
-        //    }
-        //    Console.WriteLine();
-        //}
+            }
+            Console.WriteLine();
+        }
 
-        //Console.WriteLine("GetForecastAsync: City");
+        Console.WriteLine("GetForecastAsync: City");
         return forecast;
     }
     public async Task<Forecast> GetForecastAsync(double latitude, double longitude)
@@ -60,29 +61,29 @@ public class OpenWeatherService
 
         //Event code here to fire the event
         //Your code
-        
-        Console.WriteLine($"Location: {forecast.City}");
+        OnWeatherForecastAvailable($"Weather forecast for coordinates ({latitude}, {longitude}) is available.");
+
+
+        //Console.WriteLine($"Location: {forecast.City}");
         // Date from dt in UnixTimeStamp format converted to DateTime
-        /*var groupByDate = */
-        
-        forecast.Items.GroupBy(x => x.DateTime.Date);
+        var groupByDate = forecast.Items.GroupBy(x => x.DateTime.Date);
 
-        //foreach (var date in groupByDate)
-        //{
-        //    Console.WriteLine($"Date: {date.Key.ToShortDateString()}");
-        //    foreach (var hour in date)
-        //    {
-        //        Console.WriteLine($"Time: {hour.DateTime.ToLocalTime().ToShortTimeString()}\n" +
-        //            $"  Temp: {hour.Temperature}\n" +
-        //            $"  Wind speed: {hour.WindSpeed}\n" +
-        //            $"  Condition: {hour.Description}\n" +
-        //            $"  Icon: {hour.Icon}");
+        foreach (var date in groupByDate)
+        {
+            Console.WriteLine($"Date: {date.Key.ToShortDateString()}");
+            foreach (var hour in date)
+            {
+                Console.WriteLine($"Time: {hour.DateTime.ToLocalTime().ToShortTimeString()}\n" +
+                    $"  Temp: {hour.Temperature}\n" +
+                    $"  Wind speed: {hour.WindSpeed}\n" +
+                    $"  Condition: {hour.Description}\n" +
+                    $"  Icon: {hour.Icon}");
+                //Console.WriteLine(forecast.City);
 
-        //    }
-        //    Console.WriteLine();
-        //}
+            }
+            Console.WriteLine();
+        }
 
-        //Console.WriteLine("GetForecastAsync: Coor");
 
         return forecast;
     }
@@ -97,7 +98,6 @@ public class OpenWeatherService
 
         //Convert WeatherApiData to Forecast using Linq.
         //Your code
-        //var forecast = new Forecast(); //dummy to compile, replaced by your own code
 
         var forecast = new Forecast
         {
@@ -111,10 +111,6 @@ public class OpenWeatherService
                 Icon = $"http://openweathermap.org/img/w/{item.weather.First().icon}.png"
             }).ToList()
         };
-
-        ;
-        //Console.WriteLine("ReadWebApiAsync");
-        
 
         return forecast;
     }

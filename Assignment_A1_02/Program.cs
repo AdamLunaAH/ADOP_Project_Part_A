@@ -12,6 +12,8 @@ class Program
         //Register the event
         //Your Code
 
+        service.WeatherForecastAvailable += WeatherForecastHandler;
+
         Task<Forecast>[] tasks = { null, null };
         Exception exception = null;
         try
@@ -161,6 +163,9 @@ class Program
 
     //Event handler declaration
     //Your Code 
-
+    static void WeatherForecastHandler(object sender, string message)
+    {
+        Console.WriteLine($"Weather forecast available: {message}");
+    }
 
 }
