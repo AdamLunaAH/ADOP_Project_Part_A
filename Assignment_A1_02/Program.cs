@@ -60,6 +60,7 @@ class Program
                 // Successful task
                 case TaskStatus.RanToCompletion:
                     Console.WriteLine("Task completed successfully");
+                    DisplayForecast(task.Result);
                     break;
 
                 case TaskStatus.Faulted:
@@ -86,5 +87,27 @@ class Program
     {
         Console.WriteLine($"Weather forecast available: {message}");
     }
+
+    static void DisplayForecast(Forecast forecast)
+    {
+        Console.WriteLine($"Weather forecast for {forecast.City}");
+        foreach (var item in forecast.Items.GroupBy(x => x.DateTime.Date))
+        {
+            Console.WriteLine($"***********************\n" +
+                $"Date: {item.Key.ToShortDateString()}");
+
+            foreach (var hour in item)
+            {
+                Console.WriteLine($"    Time: {hour.DateTime.ToLocalTime().ToShortTimeString()}\n" +
+                    $"      Temp: {hour.Temperature}\n" +
+                    $"      Wind speed: {hour.WindSpeed}\n" +
+                    $"      Condition: {hour.Description}\n" +
+                    $"      Icon: {hour.Icon}");
+                Console.WriteLine(forecast.City);
+            }
+            Console.WriteLine("***********************\n\n");
+        }
+    }
+
 
 }
