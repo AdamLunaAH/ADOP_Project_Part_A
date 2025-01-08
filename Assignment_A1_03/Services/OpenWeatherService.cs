@@ -8,8 +8,12 @@ namespace Assignment_A1_03.Services;
 public class OpenWeatherService
 {
     readonly HttpClient _httpClient = new HttpClient();
-    readonly ConcurrentDictionary<(double, double, string), Forecast> _cachedGeoForecasts = new ConcurrentDictionary<(double, double, string), Forecast>();
-    readonly ConcurrentDictionary<(string, string), Forecast> _cachedCityForecasts = new ConcurrentDictionary<(string, string), Forecast>();
+    //readonly ConcurrentDictionary<(double, double, string), Forecast> _cachedGeoForecasts = new ConcurrentDictionary<(double, double, string), Forecast>();
+    //readonly ConcurrentDictionary<(string, string), Forecast> _cachedCityForecasts = new ConcurrentDictionary<(string, string), Forecast>();
+
+    readonly ConcurrentDictionary<(double, double, string), (Forecast forecast, DateTime timestamp)> _cachedGeoForecasts = new ConcurrentDictionary<(double, double, string), (Forecast, DateTime)>();
+    readonly ConcurrentDictionary<(string, string), (Forecast forecast, DateTime timestamp)> _cachedCityForecasts = new ConcurrentDictionary<(string, string), (Forecast, DateTime)>();
+
 
     // Your API Key
     readonly string apiKey = "d11de2c96e160e2d3350ad3db04c75bc";
@@ -22,6 +26,7 @@ public class OpenWeatherService
     {
         WeatherForecastAvailable?.Invoke(this, message);
     }
+
     public async Task<Forecast> GetForecastAsync(string City)
     {
         //part of cache code here to check if forecast in Cache
@@ -29,11 +34,20 @@ public class OpenWeatherService
         //Your code
 
         // Check if the forecast for the city is in the cache
-        if (_cachedCityForecasts.TryGetValue((City, System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName), out var cachedForecast))
+        if (_cachedCityForecasts.TryGetValue((City, System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName), out var cachedData))
         {
-            // Trigger event indicating data is from cache
-            OnWeatherForecastAvailable($"Weather forecast for {City} is available from cache.");
-            return cachedForecast;
+            // Check if the cache is still valid (less than 1 minute old)
+            if ((DateTime.Now - cachedData.timestamp).TotalMinutes < 1)
+            {
+                // Message that the forecast is from cache
+                OnWeatherForecastAvailable($"Weather forecast for {City} is available from cache.");
+                return cachedData.forecast;
+            }
+            else
+            {
+                // If the cache is expired, clear it and fetch new data
+                _cachedCityForecasts.TryRemove((City, System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName), out _);
+            }
         }
 
         //https://openweathermap.org/current
@@ -46,10 +60,11 @@ public class OpenWeatherService
         //generate an event with different message if cached data
         //Your code
 
-        // Cache the result
-        _cachedCityForecasts[(City, language)] = forecast;
+        // Cache the new data with the current timestamp
+        _cachedCityForecasts[(City, language)] = (forecast, DateTime.Now);
 
-        OnWeatherForecastAvailable($"Weather forecast for {City} is available.");
+        // Message that the forecast is not from cache (from the OpenWeatherAPI server).
+        OnWeatherForecastAvailable($"Weather forecast for {City} is available from server.");
 
         return forecast;
 
@@ -61,11 +76,20 @@ public class OpenWeatherService
         //Your code
 
         // Check if the forecast for the coordinates is in the cache
-        if (_cachedGeoForecasts.TryGetValue((latitude, longitude, System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName), out var cachedForecast))
+        if (_cachedGeoForecasts.TryGetValue((latitude, longitude, System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName), out var cachedData))
         {
-            // Trigger event indicating data is from cache
-            OnWeatherForecastAvailable($"Weather forecast for coordinates ({latitude}, {longitude}) is available from cache.");
-            return cachedForecast;
+            // Check if the cache is still valid (less than 1 minute old)
+            if ((DateTime.Now - cachedData.timestamp).TotalMinutes < 1)
+            {
+                // Message that the forecast is from cache
+                OnWeatherForecastAvailable($"Weather forecast for coordinates ({latitude}, {longitude}) is available from cache.");
+                return cachedData.forecast;
+            }
+            else
+            {
+                // If the cache is expired, clear it and fetch new data
+                _cachedGeoForecasts.TryRemove((latitude, longitude, System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName), out _);
+            }
         }
 
 
@@ -79,10 +103,11 @@ public class OpenWeatherService
         //generate an event with different message if cached data
         //Your code
 
-        // Cache the result
-        _cachedGeoForecasts[(latitude, longitude, language)] = forecast;
+        // Cache the new data with the current timestamp
+        _cachedGeoForecasts[(latitude, longitude, language)] = (forecast, DateTime.Now);
 
-        OnWeatherForecastAvailable($"Weather forecast for coordinates ({latitude}, {longitude}) is available.");
+        // Message that the forecast is not from cache (from the OpenWeatherAPI server).
+        OnWeatherForecastAvailable($"Weather forecast for coordinates ({latitude}, {longitude}) is available from server.");
 
         return forecast;
     }
@@ -97,6 +122,8 @@ public class OpenWeatherService
 
         //Convert WeatherApiData to Forecast using Linq.
         //Your code
+
+        // Format the data from the API to the Forecast model
         var forecast = new Forecast
         {
             City = wd.city.name,
@@ -113,5 +140,16 @@ public class OpenWeatherService
     }
 
     private DateTime UnixTimeStampToDateTime(double unixTimeStamp) => DateTime.UnixEpoch.AddSeconds(unixTimeStamp).ToLocalTime();
+
+    // Clear Cache (used for testing purposes)
+    public void ClearCache()
+    {
+        _cachedGeoForecasts.Clear();
+    _cachedCityForecasts.Clear();
+    Console.WriteLine("Cache cleared.");
+    }
+
+
+
 }
 

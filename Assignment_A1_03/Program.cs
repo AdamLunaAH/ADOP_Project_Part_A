@@ -11,9 +11,12 @@ class Program
 
         //Register the event
         //Your Code
-        
+
+        // Register the WeatherForecastAvailable event handler
         service.WeatherForecastAvailable += WeatherForecastHandler;
 
+        // Clear any existing cache (for testing)
+        //service.ClearCache();
 
         Task<Forecast>[] tasks = { null, null, null, null };
         Exception exception = null;
@@ -31,14 +34,18 @@ class Program
             tasks[1] = service.GetForecastAsync(location);
 
             //Task.WaitAll(tasks[0], tasks[1]);
-            //await Task.WhenAll(tasks[0], tasks[1]);
             await Task.WhenAll(tasks[0], tasks[1]);
+            //await Task.WhenAll(tasks[0], tasks[1]);
+
+            // Clear cache between tasks (for testing)
+            //service.ClearCache();
 
             tasks[2] = service.GetForecastAsync(latitude, longitude);
             tasks[3] = service.GetForecastAsync(location);
 
-            ////Wait and confirm we get an event showing cahced data avaialable
+            //Wait and confirm we get an event showing cahced data avaialable
             await Task.WhenAll(tasks[2], tasks[3]);
+            //Task.WaitAll(tasks[2], tasks[3]);
         }
         catch (Exception ex)
         {
@@ -69,9 +76,10 @@ class Program
                 // Successful task
                 case TaskStatus.RanToCompletion:
                     Console.WriteLine("Task completed successfully");
+                    // Runs the DisplayForecast method which displays the forecast
                     DisplayForecast(task.Result);
                     break;
-
+                // Faulted task
                 case TaskStatus.Faulted:
                     Console.WriteLine($"Task faulted with exception:");
                     foreach (var innerEx in task.Exception?.InnerExceptions ?? Enumerable.Empty<Exception>())
@@ -79,9 +87,11 @@ class Program
                         Console.WriteLine($" - {innerEx.Message}");
                     }
                     break;
+                // Canceled task
                 case TaskStatus.Canceled:
                     Console.WriteLine("Task was canceled.");
                     break;
+                // Other/unexpected task faults
                 default:
                     Console.WriteLine($"Task is in an unexpected state: {task.Status}");
                     break;
@@ -93,11 +103,14 @@ class Program
     //Event handler declaration
     //Your Code
 
+    // Event handler for the WeatherForecastAvailable event
     static void WeatherForecastHandler(object sender, string message)
     {
+        // Message for if the forecast is available
         Console.WriteLine($"Weather forecast available: {message}");
     }
 
+    // Method to display the forecast
     static void DisplayForecast(Forecast forecast)
     {
         Console.WriteLine($"Weather forecast for {forecast.City}");
@@ -117,5 +130,7 @@ class Program
             Console.WriteLine("***********************\n\n");
         }
     }
+
+
 }
 
